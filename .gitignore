@@ -60,4 +60,5 @@ typings/
 .idea
 build
 public/bundle.js
+package-lock.json
 
