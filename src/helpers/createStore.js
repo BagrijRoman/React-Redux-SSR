@@ -1,6 +1,7 @@
-import { createStore, applyMiddleware } from 'redux';
+import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import axios from 'axios';
+import { createLogger } from 'redux-logger';
 
 import reducers from '../client/reducers';
 
@@ -11,10 +12,13 @@ export default (req) => {
     headers: { cookie: req.get('cookie') || '' },
   });
 
-  const store = createStore(
+  const middleware = [
+    applyMiddleware(thunk.withExtraArgument(axiosInstance)),
+    // applyMiddleware(createLogger()),
+  ];
+
+  return createStore(
     reducers,
     {},
-    applyMiddleware(thunk.withExtraArgument(axiosInstance)));
-
-  return store;
+    compose(...middleware));
 };
